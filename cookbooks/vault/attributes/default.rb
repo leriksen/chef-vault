@@ -1,19 +1,12 @@
 case node['platform_family']
-when 'debian'
-  default['vault']['repo-tools']    = 'software-properties-common'
-  default['vault']['sysconfig_dir'] = '/etc/default'
-  default['vault']['pkg_name']      = 'vault-server'
-  default['vault']['conf_dir']      = '/etc/vault'
-  default['vault']['service_name']  = 'vault'
+# put your aws/azure/vmware specifics here
+# for now we are only coding for RHEL on EC2
+# see https://docs.chef.io/infra_language/checking_platforms/#platform-values for values
+when 'debian', 'ubuntu'
 when 'rhel', 'fedora'
-  default['vault']['repo-tools']    = 'yum-utils'
-  default['vault']['sysconfig_dir'] = '/etc/sysconfig'
-  default['vault']['pkg_name']      = 'vault'
-  default['vault']['conf_dir']      = '/etc'
-  default['vault']['service_name']  = 'vault'
+when 'windows'
 end
-default['vault']['port']            = 6379
-default['vault']['group']           = 'vault'
-default['vault']['certs_path']      = '/etc/vault/ssl/certs'
-default['vault']['cert_name']       = 'vault-app.vault.australiasoutheast.cloudapp.azure.com'
-default['vault']['cert_source']     = 'https://artifactoryvault.blob.core.windows.net/data/cert_content.txt'
+
+default['vault']['repo-tools']    = 'yum-utils'
+default['vault']['pkg_name']      = 'vault'
+default['vault']['hashi_repo']    = 'https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo'
