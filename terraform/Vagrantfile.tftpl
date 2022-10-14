@@ -34,8 +34,8 @@ Vagrant.configure("2") do |config|
 
     aws.ami                   = use[:ami]
 
-    aws.security_groups       = ['sg-0cffe70ef573324fa']
-    aws.subnet_id             = 'subnet-0d81c352a5e81143b'
+    aws.security_groups       = ['${security_group}']
+    aws.subnet_id             = '${subnet}'
     aws.associate_public_ip   = true
 
     aws.ssh_host_attribute    = :public_ip_address

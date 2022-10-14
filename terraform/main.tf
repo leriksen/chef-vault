@@ -128,3 +128,11 @@ resource "aws_security_group" "allow_ssh" {
     Name = "allow_ssh"
   }
 }
+
+resource "local_file" "generate_vagrantfile" {
+  content = templatefile("${path.module}/Vagrantfile.tftpl", {
+    security_group = aws_security_group.allow_ssh.id,
+    subnet         = aws_subnet.vault.id
+  })
+  filename = "Vagrantfile"
+}
