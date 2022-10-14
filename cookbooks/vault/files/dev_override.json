@@ -1,0 +1,5 @@
+{
+  "vault": {
+    "server": "vault-app-dev.vault.australiasoutheast.cloudapp.azure.com"
+  }
+}
