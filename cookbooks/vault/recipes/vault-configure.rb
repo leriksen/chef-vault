@@ -1,3 +1,6 @@
+# secret is needed for config
+secrets = data_bag_item('vault', 'approle')
+
 template node[:vault][:agent_config][:approle][:role_id_file_path] do
   source 'role_id.erb'
   owner 'vault'
