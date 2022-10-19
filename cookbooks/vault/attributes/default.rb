@@ -18,7 +18,7 @@ default[:vault][:hashi_repo]    = {
 }
 
 default[:vault][:agent_config][:flags][:config]             = '/etc/vault.d/vault.hcl'
-default[:vault][:agent_config][:flags][:exit_after_auth]    = 'false' # default
+default[:vault][:agent_config][:flags][:exit_after_auth]    = false # default
 default[:vault][:agent_config][:flags][:log_level]          = 'info'  # default
 
 default[:vault][:agent_config][:approle][:role_id_file_path]                   = '/tmp/role_id_file_path'

@@ -1,3 +1,7 @@
+variable "ip" {
+  type = string
+}
+
 terraform {
   required_version = ">= 1.0"
   required_providers {
@@ -90,7 +94,7 @@ resource "aws_network_acl_rule" "responses" {
   protocol       = "tcp"
   rule_action    = "allow"
   cidr_block     = aws_vpc.vault.cidr_block
-  from_port      = 32768
+  from_port      = 1024
   to_port        = 65535
 }
 
@@ -103,9 +107,9 @@ resource "aws_network_acl_rule" "outbound" {
   cidr_block     = aws_vpc.vault.cidr_block
 }
 
-resource "aws_security_group" "allow_ssh" {
-  name        = "allow_ssh"
-  description = "Allow SSH inbound traffic"
+resource "aws_security_group" "vault" {
+  name        = "vault"
+  description = "Vault SG"
   vpc_id      = aws_vpc.vault.id
 
   ingress {
@@ -113,7 +117,9 @@ resource "aws_security_group" "allow_ssh" {
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = ["49.185.176.143/32"]
+    cidr_blocks      = [
+      "${var.ip}/32"
+    ]
   }
 
   egress {
@@ -125,14 +131,14 @@ resource "aws_security_group" "allow_ssh" {
   }
 
   tags = {
-    Name = "allow_ssh"
+    Name = "vault"
   }
 }
 
 resource "local_file" "generate_vagrantfile" {
   content = templatefile("${path.module}/Vagrantfile.tftpl", {
-    security_group = aws_security_group.allow_ssh.id,
+    security_group = aws_security_group.vault.id,
     subnet         = aws_subnet.vault.id
   })
-  filename = "Vagrantfile"
+  filename = "../Vagrantfile"
 }
