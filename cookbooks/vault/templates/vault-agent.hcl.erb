@@ -1,12 +1,10 @@
 # Full configuration options can be found at https://www.vaultproject.io/docs/configuration
 
-pid_file = "/var/run/vault-agent.pid"
+pid_file = "<%= node[:vault][:agent_config][:pid_file] %>"
 
 vault {
   address     = "<%= node[:vault][:agent_config][:vault_dns] %>"
   ca_cert     = "<%= node[:vault][:agent_config][:ca_file] %>"
-  client_cert = "<%= node[:vault][:cert_path] + '/' + node[:vault][:agent_config][:cert_file] %>"
-  client_cert = "<%= node[:vault][:cert_path] + '/' + node[:vault][:agent_config][:key_file] %>"
 
   retry {
     num_retries = 5
@@ -17,8 +15,9 @@ auto_auth {
   method "approle" {
     mount_path = "auth/approle"
     config = {
-      role_id_file_path                   = "<%= node[:vault][:agent_config][:approle][:role_id_file_path] %>"
-      secret_id_file_path                 = "<%= node[:vault][:agent_config][:approle][:secret_id_file_path] %>"
+      role_id_file_path                   = "<%= node[:vault][:agent_config][:role_id] %>"
+      secret_id_file_path                 = "<%= node[:vault][:agent_config][:secret_id] %>"
+      remove_secret_id_file_after_reading = false
     }
   }
 
