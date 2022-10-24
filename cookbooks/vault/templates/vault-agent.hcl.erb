@@ -3,7 +3,10 @@
 pid_file = "/var/run/vault-agent.pid"
 
 vault {
-  address = "<%= node[:vault][:agent_config][:address] %>"
+  address     = "<%= node[:vault][:agent_config][:vault_dns] %>"
+  ca_cert     = "<%= node[:vault][:agent_config][:ca_file] %>"
+  client_cert = "<%= node[:vault][:cert_path] + '/' + node[:vault][:agent_config][:cert_file] %>"
+  client_cert = "<%= node[:vault][:cert_path] + '/' + node[:vault][:agent_config][:key_file] %>"
 
   retry {
     num_retries = 5
@@ -16,11 +19,22 @@ auto_auth {
     config = {
       role_id_file_path                   = "<%= node[:vault][:agent_config][:approle][:role_id_file_path] %>"
       secret_id_file_path                 = "<%= node[:vault][:agent_config][:approle][:secret_id_file_path] %>"
-      remove_secret_id_file_after_reading = <%= node[:vault][:agent_config][:approle][:remove_secret_id_file_after_reading] %>
+    }
+  }
+
+  sink {
+    type = "file"
+    config {
+      path = "<%= node[:vault][:agent_config][:sink_file] %>"
     }
   }
 }
 
 cache {
   use_auto_auth_token = true
+}
+
+listener "tcp" {
+  address = "127.0.0.1:8100"
+  tls_disable = true
 }

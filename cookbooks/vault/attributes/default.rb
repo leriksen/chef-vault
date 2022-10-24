@@ -17,13 +17,26 @@ default[:vault][:hashi_repo]    = {
   pkg_name:     'vault',
 }
 
-default[:vault][:agent_config][:flags][:config]             = '/etc/vault.d/vault.hcl'
-default[:vault][:agent_config][:flags][:exit_after_auth]    = false # default
-default[:vault][:agent_config][:flags][:log_level]          = 'info'  # default
+default[:root]               = '/etc'
+default[:vault][:home]       = default[:root] + '/vault.d'
+default[:vault][:cert_path]  = default[:vault][:home]
+default[:vault][:repo_tools] = 'yum-utils'
 
-default[:vault][:agent_config][:approle][:role_id_file_path]                   = '/tmp/role_id_file_path'
-default[:vault][:agent_config][:approle][:secret_id_file_path]                 = '/tmp/secret_id_file_path'
-default[:vault][:agent_config][:approle][:remove_secret_id_file_after_reading] = true
+default[:vault][:agent_config][:config]   = default[:vault][:home] + '/vault-agent.hcl'
+default[:vault][:agent_config][:pid_path] = default[:vault][:home]
+default[:vault][:agent_config][:pid_file] = default[:vault][:agent_config][:pid_path] + '/vault-agent.pid'
 
-default[:vault][:agent_config][:args][:address]   = 'https://vault-public-vault-8860d7cf.f6ac8407.z1.hashicorp.cloud:8200'      # server address - overrides value in config file
+default[:vault][:agent_config][:vault_dns] = 'https://vault-public-vault-8860d7cf.f6ac8407.z1.hashicorp.cloud:8200'
 default[:vault][:agent_config][:args][:namespace] = 'admin' # namespace for commands
+
+default[:vault][:agent_config][:ca_file] = '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem'
+default[:vault][:agent_config][:cert_file] = 'agent.crt'
+default[:vault][:agent_config][:key_file]  = 'agent.key'
+
+default[:vault][:agent_config][:service_name]  = 'vault-agent.service'
+
+default[:vault][:agent_config][:sink_file]  = 'vault-agent-sink'
+
+default[:accounts][:vault][:unix_user]  = 'vault'
+default[:accounts][:vault][:unix_group] = 'vault'
+
