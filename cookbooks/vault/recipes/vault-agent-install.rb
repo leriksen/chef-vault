@@ -14,13 +14,10 @@ package node[:vault][:hashi_repo][:pkg_name] do
   action :install
 end
 
-# we remove the default config/env, as we generate from templates
-file '/etc/vault.d/vault.hcl' do
-  action :delete
-  backup false
-end
-
-file '/etc/vault.d/vault.env' do
-  action :delete
-  backup false
+# we remove the unrequired default items
+node[:vault][:clean_list].each do |item|
+  file item do
+    action :delete
+    backup false
+  end
 end

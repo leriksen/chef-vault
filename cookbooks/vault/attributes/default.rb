@@ -21,6 +21,11 @@ default[:root]               = '/etc'
 default[:vault][:home]       = node[:root] + '/vault.d'
 default[:vault][:cert_path]  = node[:vault][:home]
 default[:vault][:repo_tools] = 'yum-utils'
+# list of files to remove from default package install
+default[:vault][:clean_list] = [
+  '/etc/vault.d/vault.hcl',
+  '/etc/vault.d/vault.env',
+]
 
 default[:vault][:agent_config][:config]   = node[:vault][:home] + '/vault-agent.hcl'
 default[:vault][:agent_config][:pid_path] = node[:vault][:home]
