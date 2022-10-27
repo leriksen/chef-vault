@@ -1,5 +1,5 @@
 describe "vault::vault-agent-install" do
-  platform 'redhat'
+  platform 'redhat', '8'
 
   it { is_expected.to install_package('yum-utils') }
   it { is_expected.to create_yum_repository('hashicorp') }

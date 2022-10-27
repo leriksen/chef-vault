@@ -4,7 +4,7 @@ systemd_unit node[:vault][:agent_config][:service_name] do
       Unit: {
         Description: 'Vault',
         Documentation: 'https://vaultproject.io/docs',
-        ConditionNotEmpty: node[:vault][:agent_config][:config],
+        ConditionFileNotEmpty: node[:vault][:agent_config][:config],
         Requires: 'network.target',
         After: 'network.target',
         StartLimitIntervalSec: '30',

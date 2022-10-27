@@ -1,5 +1,5 @@
 describe "vault::vault-agent-configure" do
-  platform 'redhat'
+  platform 'redhat', '8'
 
   before(:each) do
     stub_data_bag_item("vault", "approle").and_return(
