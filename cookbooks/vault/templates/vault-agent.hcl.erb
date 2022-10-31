@@ -13,6 +13,7 @@ vault {
 auto_auth {
   method {
     type = "approle"
+    namespace = "admin"
     config = {
       role_id_file_path                   = "<%= node[:vault][:agent_config][:role_id] %>"
       secret_id_file_path                 = "<%= node[:vault][:agent_config][:secret_id] %>"
