@@ -4,7 +4,6 @@ pid_file = "<%= node[:vault][:agent_config][:pid_file] %>"
 
 vault {
   address     = "<%= node[:vault][:agent_config][:vault_dns] %>"
-  ca_cert     = "<%= node[:vault][:agent_config][:ca_file] %>"
 
   retry {
     num_retries = 5
@@ -12,8 +11,8 @@ vault {
 }
 
 auto_auth {
-  method "approle" {
-    mount_path = "auth/approle"
+  method {
+    type = "approle"
     config = {
       role_id_file_path                   = "<%= node[:vault][:agent_config][:role_id] %>"
       secret_id_file_path                 = "<%= node[:vault][:agent_config][:secret_id] %>"
