@@ -12,7 +12,7 @@ systemd_unit node[:vault][:agent_config][:service_name] do
       },
       Service: {
         PermissionsStartOnly: true,
-        ExecStart: '/usr/bin/vault agent -config ' +  node[:vault][:agent_config][:config],
+        ExecStart: '/usr/bin/vault agent -config=' +  node[:vault][:agent_config][:config],
         ExecReload: 'kill -HUP $MAINPID',
         KillMode: 'process',
         KillSignal: 'SIGTERM',
