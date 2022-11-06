@@ -34,9 +34,12 @@ default[:vault][:agent_config][:pid_file] = node[:vault][:agent_config][:pid_pat
 default[:vault][:agent_config][:vault_dns] = 'https://vault-public-vault-8860d7cf.f6ac8407.z1.hashicorp.cloud:8200'
 default[:vault][:agent_config][:args][:namespace] = 'admin' # namespace for commands
 
+default[:vault][:agent_config][:wrapped_cert][:content]    = 'tba' # unwrap and write to cert and key files
+default[:vault][:agent_config][:wrapped_cert][:cert_field] = 'cert' # field in the tokens .data.data attribute containing JSON cert data
+
 default[:vault][:agent_config][:ca_file] = '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem'
-default[:vault][:agent_config][:cert_file] = 'agent.crt'
-default[:vault][:agent_config][:key_file]  = 'agent.key'
+default[:vault][:agent_config][:cert_file] = node[:vault][:home] + '/agent.crt'
+default[:vault][:agent_config][:key_file]  = node[:vault][:home] + '/agent.key'
 
 default[:vault][:agent_config][:service_name]  = 'vault-agent.service'
 
