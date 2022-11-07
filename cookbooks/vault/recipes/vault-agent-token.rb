@@ -10,8 +10,8 @@ script 'unwrap_token' do
     echo $VAULT_TOKEN > /etc/vault.d/agent_token.txt
     json=$(vault unwrap -format=json | jq -r '.data.data.#{node[:vault][:agent_config][:wrapped_cert][:cert_field]}' )
     echo $json  >> /etc/vault.d/agent_token.txt
-    echo json | jq -r '."client-cert"' > "#{node[:vault][:agent_config][:cert_file]}"
-    echo json | jq -r '."client-key"'  > "#{node[:vault][:agent_config][:key_file]}"
+    echo $json | jq -r '."client-cert"' > "#{node[:vault][:agent_config][:cert_file]}"
+    echo $json | jq -r '."client-key"'  > "#{node[:vault][:agent_config][:key_file]}"
     json=
     VAULT_TOKEN=
   EOH
