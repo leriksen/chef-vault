@@ -54,5 +54,11 @@ Vagrant.configure("2") do |config|
     override.vm.synced_folder ".", "/vagrant", disabled: true
 
   end
+
+  config.vm.provision "shell" do |s|
+    s.inline = <<-EOS
+      yum install -y jq
+    EOS
+  end
 end
 
