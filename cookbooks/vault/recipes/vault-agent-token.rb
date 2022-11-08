@@ -1,18 +1,25 @@
-script 'unwrap_token' do
-  interpreter "bash"
-  environment (
-    {
-      VAULT_TOKEN: node[:vault][:agent_config][:wrapped_cert][:content],
-      VAULT_ADDR:  node[:vault][:agent_config][:vault_dns]
-    }
-  )
-  code <<-EOH
-    echo $VAULT_TOKEN > /etc/vault.d/agent_token.txt
-    json=$(vault unwrap -format=json | jq -r '.data.data.#{node[:vault][:agent_config][:wrapped_cert][:cert_field]}' )
-    echo $json  >> /etc/vault.d/agent_token.txt
-    echo $json | jq -r '."client-cert"' > "#{node[:vault][:agent_config][:cert_file]}"
-    echo $json | jq -r '."client-key"'  > "#{node[:vault][:agent_config][:key_file]}"
-    json=
-    VAULT_TOKEN=
-  EOH
+ruby_block 'unwrap_token' do
+  block do
+    require 'uri'
+    require 'net/http'
+    require 'json'
+
+    uri = URI node[:vault][:agent_config][:vault_dns] + '/v1/sys/wrapping/unwrap'
+    https = Net::HTTP.new(uri.host, uri.port)
+    https.use_ssl = true
+
+    req = Net::HTTP::Post.new uri.path
+
+    token = node[:vault][:agent_config][:wrapped_cert][:content]
+    req['X-Vault-Token'] = token
+
+    resp = https.request req
+
+    body = JSON.parse resp.body
+
+    cert = JSON.parse body['data']['data']['cert']
+
+    File.write node[:vault][:agent_config][:role_id  ], cert['role_id'  ]
+    File.write node[:vault][:agent_config][:secret_id], cert['secret_id']
+ end
 end
