@@ -1,5 +1,9 @@
 {
-  "vault": {
-    "server": "vault-app-dev.vault.australiasoutheast.cloudapp.azure.com"
-  }
+	"vault": {
+		"agent_config": {
+			"wrapped_cert": {
+				"content": "hvs.CAESIP0e-keWpDOxTsVZpcXSy1EbCxuL-xrzoCS29FZ9fN-QGigKImh2cy5FRFBPQmVOcEtOYmlNcmZFbjY1RkRtQTIud1RYalAQovQN"
+			}
+		}
+	}
 }
