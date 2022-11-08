@@ -7,7 +7,7 @@ ruby_block 'unwrap_token' do
     uri = URI node[:vault][:agent_config][:vault_dns] + '/v1/sys/wrapping/unwrap'
     https = Net::HTTP.new(uri.host, uri.port)
     https.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    https.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
     req = Net::HTTP::Post.new uri.path
 
