@@ -12,12 +12,34 @@ req = Net::HTTP::Post.new uri.path
 req['X-Vault-Token'] = token
 
 resp = https.request req
-puts resp.body if resp.is_a?(Net::HTTPSuccess)
 
-body = JSON.parse resp.body
+case resp
+when Net::HTTPForbidden
+  puts "resource is forbidden to client #{resp.message} #{resp.code} msg==<#{resp.read_body}>"
+  exit
+when Net::HTTPClientError
+  puts "request has an error from client #{resp.message} #{resp.code} msg==<#{resp.read_body}>"
+  exit
+when Net::HTTPSuccess
+  # continue as if nothing happened
+  body = resp.body
+when Net::HTTPFatalError, Net::HTTPServerException, Net::HTTPRetriableError, Net::HTTPError
+  puts "request has a probable protocol error #{resp.message} #{resp.code} msg==<#{resp.read_body}>"
+  exit
+else
+  puts "unusual condition #{resp.class} #{resp.message} #{resp.code} msg==<#{resp.read_body}>"
+  exit
+end
+
 puts body.inspect
 
-cert = JSON.parse body['data']['data']['cert']
+begin
+  cert = JSON.parse body['data']['data']['cert']
+rescue JSON::ParseError => e
+  puts "unable to parse JSON response from vault - #{e.message}"
+  exit
+end
+
 puts cert.inspect
 
 puts "cert is " + cert['client-cert']
